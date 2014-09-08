@@ -9,7 +9,7 @@ namespace Drunkcod.DataTools
 	public class ResultSetComparer
 	{
 		public Action<ResultRow, ResultRow> OnRowMismatch;
-		public void CompareResults(ResultSet x, ResultSet y, bool ignoreOrdering) {
+		public void CompareResults(ResultSet<ResultRow> x, ResultSet<ResultRow> y, bool ignoreOrdering) {
 			if(x.Columns.Length != y.Columns.Length)
 				throw new InvalidOperationException("Different number of columns");
 			if(x.Rows.Count != y.Rows.Count)
