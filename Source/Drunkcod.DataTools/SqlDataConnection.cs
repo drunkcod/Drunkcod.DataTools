@@ -67,7 +67,7 @@ namespace Drunkcod.DataTools
 	{
 		readonly object[] values;
 
-		ResultRow(object[] values) {
+		public ResultRow(params object[] values) {
 			this.values = values;
 		}
 
@@ -82,6 +82,7 @@ namespace Drunkcod.DataTools
 		public object this[int index]
 		{
 			get { return values[index]; }
+			set { values[index] = value; }
 		}
 
 		IEnumerator<object> IEnumerable<object>.GetEnumerator() {
