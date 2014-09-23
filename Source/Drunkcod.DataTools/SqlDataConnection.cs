@@ -108,6 +108,14 @@ namespace Drunkcod.DataTools
 				return run(cmd);
 		}
 
+		public SqlParameter Param(string name, int value) {
+			return new SqlParameter { ParameterName = name, DbType = DbType.Int32, Value = value };
+		}
+
+		public SqlParameter Param(string name, bool value) {
+			return new SqlParameter { ParameterName = name, DbType = DbType.Boolean, Value = value };
+		}
+
 		public void ExecuteCommand(string command) {
 			WithCommand(cmd => {
 				cmd.CommandText = command;
@@ -164,15 +172,13 @@ namespace Drunkcod.DataTools
 			using(var reader = cmd.ExecuteReader()) {
 				do {
 					yield return new ResultSet<ResultRow> {
-						Columns = Enumerable.Range(0, reader.FieldCount)
-						.Select(x => new ResultColumn(reader.GetName(x), reader.GetFieldType(x))).ToArray(),
+						Columns = GetResultColumns(reader),
 						Rows = ReadResult(reader).ToList(),
 					};
 				} while(reader.NextResult());
 			}
 		}
 
-		
 		static ResultColumn[] StatisticsColumns = new ResultColumn[] {
 			new ResultColumn("Rows", typeof(Int64)),
 			new ResultColumn("Executes", typeof(Int64)),
@@ -216,8 +222,7 @@ namespace Drunkcod.DataTools
 					}
 					else {
 						result = new ResultSet<ResultRow> {
-							Columns = Enumerable.Range(0, reader.FieldCount)
-							.Select(x => new ResultColumn(reader.GetName(x), reader.GetFieldType(x))).ToArray(),
+							Columns = GetResultColumns(reader), 
 							Rows = rows.ToList(),
 						};
 					}
@@ -225,6 +230,12 @@ namespace Drunkcod.DataTools
 			}
 		}
 
+		ResultColumn[] GetResultColumns(SqlDataReader reader) {
+			var columns = new ResultColumn[reader.FieldCount];
+			for(var i = 0; i != columns.Length; ++i)
+				columns[i] = new ResultColumn(reader.GetName(i), reader.GetFieldType(i)); 
+			return columns;
+		}
 
 		IEnumerable<ResultRow> ReadResult(SqlDataReader reader) {
 			while(reader.Read())
