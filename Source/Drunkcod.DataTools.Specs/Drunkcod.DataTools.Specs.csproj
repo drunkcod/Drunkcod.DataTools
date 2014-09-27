@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ResultSetComparerSpec.cs" />
+    <Compile Include="SqlDataConnectionSpec.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Drunkcod.DataTools\Drunkcod.DataTools.csproj">
